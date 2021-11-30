@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using CoursesAPI.Models;
 
 namespace CoursesAPI.Controllers
@@ -40,6 +41,34 @@ namespace CoursesAPI.Controllers
             _context.Professores.Add(prof);
             _context.SaveChanges();
             return CreatedAtAction("GetProfessor",new Professor{Id = prof.Id}, prof);
+        }
+
+        //PUT       api/professores/id
+        [HttpPut("{id}")]
+        public ActionResult<Professor> UpdateProfessor(int id, Professor prof)
+        {
+            if(prof.Id != id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(prof).State = EntityState.Modified;
+            _context.SaveChanges();
+            return NoContent();
+        }
+
+        //DELETE        api/professores/id
+        [HttpDelete("{id}")]
+        public ActionResult<IEnumerable<Professor>> DeleteProfessor(int id)
+        {
+            var prof = _context.Professores.Find(id);
+            if(prof == null)
+            {
+                return NotFound();
+            }
+            _context.Professores.Remove(prof);
+            _context.SaveChanges();
+            return _context.Professores;
         }
     }
 }
