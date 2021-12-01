@@ -61,5 +61,19 @@ namespace CoursesAPI.Controllers
             }
         }
 
+        //DELETE        api/alunos/id
+        [HttpDelete("{id}")]
+        public ActionResult<IEnumerable<Aluno>> DeleteAluno(int id)
+        {
+            var alunoItem = _context.Alunos.Find(id);
+            if(alunoItem == null)
+            {
+                return NotFound();
+            }
+            _context.Alunos.Remove(alunoItem);
+            _context.SaveChanges();
+            return _context.Alunos;
+        }
+
     }
 }
