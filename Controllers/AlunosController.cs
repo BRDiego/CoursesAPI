@@ -31,5 +31,14 @@ namespace CoursesAPI.Controllers
             }
             return alunoItem;
         }
+
+        //POST      api/alunos/create
+        [HttpPost]
+        public ActionResult<Aluno> CreateAluno(Aluno aluno)
+        {
+            _context.Alunos.Add(aluno);
+            _context.SaveChanges();
+            return CreatedAtAction("GetAluno", new Aluno{Id = aluno.Id}, aluno);
+        }
     }
 }
