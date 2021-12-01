@@ -14,10 +14,22 @@ namespace CoursesAPI.Controllers
         public AlunosController(CoursesContext context) => _context = context;
 
         //GET       api/alunos
-        
         [HttpGet]
-        public ActionResult<IEnumerable<Aluno>> GetAlunos(){
+        public ActionResult<IEnumerable<Aluno>> GetAlunos()
+        {
             return _context.Alunos;
+        }
+
+        //GET       api/alunos/id
+        [HttpGet("{id}")]
+        public ActionResult<Aluno> GetAluno(int id)
+        {
+            var alunoItem = _context.Alunos.Find(id);
+            if(alunoItem == null)
+            {
+                return NotFound();
+            }
+            return alunoItem;
         }
     }
 }
