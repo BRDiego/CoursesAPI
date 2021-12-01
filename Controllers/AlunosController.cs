@@ -1,7 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using CoursesAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CoursesAPI.Controllers
 {
@@ -32,7 +32,7 @@ namespace CoursesAPI.Controllers
             return alunoItem;
         }
 
-        //POST      api/alunos/create
+        //POST      api/alunos
         [HttpPost]
         public ActionResult<Aluno> CreateAluno(Aluno aluno)
         {
@@ -40,5 +40,26 @@ namespace CoursesAPI.Controllers
             _context.SaveChanges();
             return CreatedAtAction("GetAluno", new Aluno{Id = aluno.Id}, aluno);
         }
+
+        //PUT       api/alunos/id
+        [HttpPut("{id}")]
+        public ActionResult<Aluno> UpdateAluno(int id, Aluno aluno)
+        {
+            if(id != aluno.Id)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _context.Entry(aluno).State = EntityState.Modified;
+                _context.SaveChanges();
+                return NoContent();
+            }
+            catch(DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
+        }
+
     }
 }
